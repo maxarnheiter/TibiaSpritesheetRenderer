@@ -11,3 +11,16 @@ C:\Users\Max\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\
 C:\Users\Max\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.csproj.GenerateResource.Cache
 C:\Users\Max\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.exe
 C:\Users\Max\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.pdb
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\bin\Debug\TibiaSpritesheetRenderer.exe.config
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.exe
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.pdb
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\bin\Debug\TibiaSpritesheetRenderer.exe
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\bin\Debug\TibiaSpritesheetRenderer.pdb
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.csprojResolveAssemblyReference.cache
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\MainWindow.baml
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\MainWindow.g.cs
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\App.g.cs
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer_MarkupCompile.cache
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.g.resources
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.Properties.Resources.resources
+C:\Users\max_a\Documents\GitHub\TibiaSpritesheetRenderer\TibiaSpritesheetRenderer\obj\Debug\TibiaSpritesheetRenderer.csproj.GenerateResource.Cache
