@@ -19,15 +19,37 @@ using System.Threading;
 
 namespace TibiaSpritesheetRenderer
 {
+
+    public class TibiaObject
+    {
+        public int id;
+        public int width;
+        public int height;
+        public List<int> spriteIds;
+
+        public TibiaObject(int id, int width, int height, List<int> spriteIds)
+        {
+            this.id = id;
+            this.width = width;
+            this.height = height;
+            this.spriteIds = spriteIds;
+        }
+    }
+
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        int index = 2;
+        int objectId;
+        int spriteId;
 
         string spritePath = "";
         string dataPath = "";
+
+        Dictionary<int, Bitmap> sprites = new Dictionary<int, Bitmap>();
+        Dictionary<int, TibiaObject> objects = new Dictionary<int, TibiaObject>();
 
         public MainWindow()
         {
@@ -45,6 +67,7 @@ namespace TibiaSpritesheetRenderer
             if(result == true)
             {
                 spritePath = dialog.FileName;
+                LoadAllSprites();
             }
         }
 
@@ -62,10 +85,13 @@ namespace TibiaSpritesheetRenderer
             }
         }
 
+  
+
         private void SetImage()
         {
-            System.Drawing.Image image = LoadSprites(spritePath, index);
-            Bitmap bmp = image as Bitmap;
+            Bitmap bmp;
+
+            sprites.TryGetValue(spriteId, out bmp);
 
             MemoryStream memory = new MemoryStream();
 
@@ -81,47 +107,55 @@ namespace TibiaSpritesheetRenderer
             base_window.UpdateLayout();
         }
 
-        private System.Drawing.Image LoadSprites(string file, int spriteId)
+        private void LoadAllSprites()
         {
+            sprites = new Dictionary<int, Bitmap>();
 
-            int size = 32;
-            Bitmap bitmap = new Bitmap(size, size);
+            BinaryReader reader = new BinaryReader(File.OpenRead(spritePath));
 
-            using (BinaryReader reader = new BinaryReader(File.OpenRead(file)))
+            UInt32 spriteVersion = reader.ReadUInt32();
+            UInt32 spriteCount = reader.ReadUInt32();
+
+            for(int i = 0; i < spriteCount; i++)
             {
+                Bitmap bitmap = new Bitmap(32, 32);
+                int currentPixel = 0;
 
-
-                ushort currentPixel = 0;
-                long targetOffset;
-
-                reader.BaseStream.Seek(6 + (spriteId - 1) * 4, SeekOrigin.Begin);
+                reader.BaseStream.Seek(8 + (i + 1) * 4, SeekOrigin.Begin);
                 reader.BaseStream.Seek(reader.ReadUInt32() + 3, SeekOrigin.Begin);
 
-                targetOffset = reader.BaseStream.Position + reader.ReadUInt16();
+                var offset = reader.BaseStream.Position + reader.ReadUInt16();
 
-
-                while (reader.BaseStream.Position < targetOffset)
+                while(reader.BaseStream.Position < offset)
                 {
-                    ushort transparentPixels = reader.ReadUInt16();
-                    ushort coloredPixels = reader.ReadUInt16();
+                    var transparentPixels = reader.ReadUInt16();
+                    var coloredPixels = reader.ReadUInt16();
+
+                    if (transparentPixels > 1024 || coloredPixels > 1024)
+                        break;
+
                     currentPixel += transparentPixels;
-                    for (int i = 0; i < coloredPixels; i++)
+
+                    for(int j = 0; j < coloredPixels; j++)
                     {
-                        bitmap.SetPixel(
-                            currentPixel % size,
-                            currentPixel / size,
-                            System.Drawing.Color.FromArgb(reader.ReadByte(), reader.ReadByte(), reader.ReadByte())
-                        );
+                        var red = reader.ReadByte();
+                        var green = reader.ReadByte();
+                        var blue = reader.ReadByte();
+
+                        int x = currentPixel % 32;
+                        int y = currentPixel / 32;
+
+                        bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(red, green, blue));
+
                         currentPixel++;
                     }
                 }
-                Debug.WriteLine("made it here");
+
+                sprites.Add(i+1, bitmap);
             }
 
-            Debug.WriteLine("finished");
-            
-            return bitmap;
         }
+
 
         private void LoadData()
         {
@@ -143,40 +177,128 @@ namespace TibiaSpritesheetRenderer
                 UInt16 id = minclientID;
                 while (id <= maxclientID)
                 {
-                    Debug.WriteLine("ID: " + id);
                     byte optbyte;
                     do
                     {
-                    optbyte = reader.ReadByte();
+                        optbyte = reader.ReadByte();
+                        switch (optbyte)
+                        {
+                            case 0x00:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x08:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x09:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x16:
+                                {
+                                    reader.ReadUInt16();
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x19:
+                                {
+                                    reader.BaseStream.Seek(4, SeekOrigin.Current);
+                                    break;
+                                }
+                            case 0x1A:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x1D:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x1E:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x21:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x22:
+                                {
+                                    reader.ReadUInt16();
+                                    reader.ReadUInt16();
+                                    reader.ReadUInt16();
+                                    var size = reader.ReadUInt16();
+                                    var blah = reader.ReadChars(size);
+                                    reader.ReadUInt16();
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            case 0x23:
+                                {
+                                    reader.ReadUInt16();
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                                
+                        }
                     } while (optbyte != 0xFF);
 
                     var width = reader.ReadByte();
                     var height = reader.ReadByte();
+
                     if ((width > 1) || (height > 1))
                     {
                         reader.BaseStream.Position++;
                     }
+
                     var frames = reader.ReadByte();
                     var xdiv = reader.ReadByte();
                     var ydiv = reader.ReadByte();
                     var zdiv = reader.ReadByte();
                     var animationLength = reader.ReadByte();
 
+                    /*
+                    if (animationLength > 1)
+                    {
+                        reader.ReadByte();
+                        reader.ReadInt32();
+                        reader.ReadByte();
+                        for (int i = 0; i < animationLength; i++)
+                        {
+                            reader.ReadUInt32();
+                            reader.ReadUInt32();
+                        }
+                    }
+                     */
+
                     var numSprites =
                     (UInt32)width * (UInt32)height *
                     (UInt32)frames *
-                    (UInt32)xdiv * (UInt32)ydiv * zdiv *
+                    (UInt32)xdiv * (UInt32)ydiv * (UInt32)zdiv *
                     (UInt32)animationLength;
 
-                    var spriteList = new List<UInt32>();
+                    var spriteList = new List<int>();
 
                     // Read the sprite ids
-                    for (UInt32 i = 0; i <numSprites; ++i)
+                    for (UInt32 i = 0; i < numSprites; ++i)
                     {
                         var spriteId = reader.ReadUInt32();
-                        Debug.WriteLine(spriteId);
-                        spriteList.Add(spriteId);
+                        spriteList.Add((int)spriteId);
                     }
+
+                    if (spriteList.Count > 0)
+                        objects.Add(id, new TibiaObject(id, width, height, spriteList));
+
                     ++id;
                 }
             }
@@ -184,52 +306,38 @@ namespace TibiaSpritesheetRenderer
 
         private void next_button_Click(object sender, RoutedEventArgs e)
         {
-            index++;
-            SetImage();
-           // AlternativeLoadSprite();
+         
         }
 
-
-        public void AlternativeLoadSprite()
+        private void find_obj_Click(object sender, RoutedEventArgs e)
         {
-            FileStream fileStream = new FileStream(spritePath, FileMode.Open);
-            try
+            var objs = objects.Where(o => o.Value.width == 2 && o.Value.height == 2 && o.Value.spriteIds.Count == 4);
+            Random r = new Random();
+            int randomId = r.Next(0, objs.Count());
+            objectId = objs.ElementAt(randomId).Key;
+
+            Debug.WriteLine("Random object id found: " + objectId);
+
+            TibiaObject target;
+            objects.TryGetValue(objectId, out target);
+           
+            if(target != null)
             {
-                using (BinaryReader reader = new BinaryReader(fileStream))
+                foreach (int id in target.spriteIds)
                 {
-                    UInt32 sprSignature = reader.ReadUInt32();
-                    UInt16 totalPics = reader.ReadUInt16();
-
-                    List<UInt32> spriteIndexes = new List<UInt32>();
-                    for (uint i = 0; i < totalPics; ++i)
+                    Debug.WriteLine("id: " + id);
+                    Bitmap bmp;
+                    sprites.TryGetValue(id-1, out bmp);
+                    if(bmp != null)
                     {
-                        UInt32 index = reader.ReadUInt32();
-                        spriteIndexes.Add(index);
+                        string fileName = "C:\\dump\\" + id + ".png";
+                        bmp.Save(fileName);
                     }
-
-                    Debug.WriteLine("num of sprite indexex: " + spriteIndexes.Count());
-
-                    UInt16 id = 1;
-                    foreach (UInt32 element in spriteIndexes)
-                    {
-                        UInt32 index = element + 3;
-                        reader.BaseStream.Seek(index, SeekOrigin.Begin);
-                        UInt16 size = reader.ReadUInt16();
-                        Debug.WriteLine("size is " + size);
-
-                        var dump = reader.ReadBytes(size);
-                        
-
-                    }
-
-                    ++id;
                 }
             }
-            finally
-            {
-                fileStream.Close();
-            }
         }
+
+
 
 
 

@@ -8,9 +8,10 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="load_sprites_button" Content="Load Sprites" HorizontalAlignment="Left" Margin="10,0,0,288" VerticalAlignment="Bottom" Width="118" Height="22" Click="load_sprite_button_Click"/>
-        <Image x:Name="test_image" HorizontalAlignment="Left" Height="100" Margin="28,104,0,0" VerticalAlignment="Top" Width="100"/>
-        <Button x:Name="next_button" Content="Next" HorizontalAlignment="Left" Margin="154,158,0,0" VerticalAlignment="Top" Width="75" Click="next_button_Click"/>
-        <Button x:Name="load_data_button" Content="Load Data" HorizontalAlignment="Left" Margin="319,10,0,0" VerticalAlignment="Top" Width="125" Click="load_data_button_Click"/>
+        <Image x:Name="test_image" HorizontalAlignment="Left" Height="100" Margin="28,198,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="next_button" Content="Next" HorizontalAlignment="Left" Margin="39,153,0,0" VerticalAlignment="Top" Width="75" Click="next_button_Click"/>
+        <Button x:Name="load_data_button" Content="Load Data" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Width="118" Click="load_data_button_Click"/>
+        <Button x:Name="find_obj" Content="Find 4 sprite object" HorizontalAlignment="Left" Margin="366,153,0,0" VerticalAlignment="Top" Width="123" Click="find_obj_Click"/>
 
     </Grid>
 </Window>
