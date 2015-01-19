@@ -8,14 +8,16 @@ namespace TibiaSpritesheetRenderer
 {
     public partial class MainWindow
     {
+        //Sprites path
         string spritesPath = "";
         bool haveSpriteFile;
 
-
+        //Save path
         string savePath = "";
         string saveName = "";
         bool haveSavePath;
 
+        //Output width - stays synced with label
         int _outputWidth;
         int outputWidth
         {
@@ -27,6 +29,7 @@ namespace TibiaSpritesheetRenderer
             }
         }
 
+        //Output height - stays synced with label
         int _outputHeight;
         int outputHeight
         {

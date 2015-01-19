@@ -43,6 +43,7 @@ namespace TibiaSpritesheetRenderer
 
         private void CheckSpritesFile()
         {
+
             BinaryReader reader = new BinaryReader(File.OpenRead(spritesPath));
             UInt32 version = reader.ReadUInt32();
             UInt32 count = reader.ReadUInt32();
@@ -67,21 +68,24 @@ namespace TibiaSpritesheetRenderer
             reader.ReadUInt32(); //Skip over version info
             int count = (int)reader.ReadUInt32();
 
+
+            //We get these variables so they can't be changed while we're rendering
             string finalSavePath = savePath;
             string finalSaveName = saveName;
+
+            int finalPXWidth = outputWidth;
+            int finalPXHeight = outputHeight;
 
             int sheetNumber = 0;
             int row = 0;
             int column = 0;
-
-            int finalPXWidth = outputWidth;
-            int finalPXHeight = outputHeight;
 
             int maxColumnSize = (finalPXWidth / 32)- 1;
             int maxRowSize = (finalPXHeight / 32) - 1;
 
             Bitmap bitmap = new Bitmap(finalPXWidth, finalPXHeight);
 
+            //Loop through all sprites
             for (int i = 0; i < count; i++)
             {
                 int currentPixel = 0;
@@ -91,6 +95,7 @@ namespace TibiaSpritesheetRenderer
 
                 var offset = reader.BaseStream.Position + reader.ReadUInt16();
 
+                //Loop until we reach our target byte offset
                 while (reader.BaseStream.Position < offset)
                 {
                     var transparentPixels = reader.ReadUInt16();
@@ -101,8 +106,10 @@ namespace TibiaSpritesheetRenderer
 
                     currentPixel += transparentPixels;
 
+                    //Loop through all consecutive colored pixels 
                     for (int j = 0; j < coloredPixels; j++)
                     {
+                        //Grab the pixels and add them to our bitmap
                         var red = reader.ReadByte();
                         var green = reader.ReadByte();
                         var blue = reader.ReadByte();
